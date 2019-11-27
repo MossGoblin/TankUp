@@ -5,7 +5,6 @@ using UnityEngine;
 public class LayerData
 {
     // weapon type
-    // hp
     // uses
     public WeaponTypes WeaponType { get; private set; }
     public int Uses { get; private set; }

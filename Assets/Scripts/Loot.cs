@@ -6,17 +6,19 @@ public class Loot : MonoBehaviour
 {
     // refs
     [SerializeField] GameMaster master;
-    LayerData layerData;
+    public LayerData LayerData { get; private set; }
+
+    GameObject lastOwner;
+
     // Start is called before the first frame update
     void Start()
     {
         master = GameObject.Find("GameMaster").GetComponent<GameMaster>();
-        layerData = master.GenerateRandomLayer();
+        LayerData = master.GenerateRandomLayer();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetOwner(GameObject owner)
     {
-        
+        lastOwner = owner;
     }
 }

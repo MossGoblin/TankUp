@@ -6,6 +6,7 @@ public class PlayerMaster : MonoBehaviour
 {
     // temp refs
     [SerializeField] GameObject coinPrefab;
+    [SerializeField] GameObject bombPrefab;
     
     //refs
     [SerializeField] GameMaster master;
@@ -20,6 +21,8 @@ public class PlayerMaster : MonoBehaviour
     private float sizeFactor;
     private float damageFactor;
 
+    private float sizeFactorWeight = 0.05f;
+    private float currentSizeModifier = 0;
     private float speed = 5;
     private float rotationSpeed = 70;
 
@@ -27,8 +30,15 @@ public class PlayerMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         // generate tank data
         tankData = master.GenerateNewTankData();
+
+        // test layer
+        LayerData testSecondLayer = master.GenerateRandomLayer();
+        tankData.AddLayer(testSecondLayer);
+
+
         // position player
         int startPosX = master.terrain.Width;
         int startPosY = master.terrain.Height;
@@ -44,7 +54,6 @@ public class PlayerMaster : MonoBehaviour
     void Update()
     {
         UpdateState();
-        UpdateSize();
         HandleMovement();
         HandleTempInput();
     }
@@ -75,12 +84,19 @@ public class PlayerMaster : MonoBehaviour
     {
         speedFactor = tankData.SpeedFactor;
         rotationFactor = tankData.RotationFactor;
+        
         sizeFactor = tankData.SizeFactor * 0.05f;
         damageFactor = tankData.DamageFactor;
         weapon = tankData.CurrentWeapon();
+
+        if (currentSizeModifier != tankData.SizeFactor)
+        {
+            currentSizeModifier = tankData.SizeFactor;
+            UpdateSize(currentSizeModifier * sizeFactorWeight);
+        }
     }
 
-    private void UpdateSize()
+    private void UpdateSize(float sizeFactor)
     {
         Vector3 newScale = new Vector3(transform.localScale.x * (1 + sizeFactor), transform.localScale.y * (1 + sizeFactor), transform.localScale.z);
         transform.localScale = newScale;
@@ -88,10 +104,55 @@ public class PlayerMaster : MonoBehaviour
 
     private void HandleTempInput()
     {
-        if (Input.GetKey(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Backspace))
         {
-        Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
-        Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
+            Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+            GameObject newLoot = Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
+            newLoot.GetComponent<Loot>().SetOwner(master.transform.gameObject);
+        }
+
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            Vector3 positionForBomb = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+            GameObject newBomb = Instantiate(bombPrefab, positionForBomb, Quaternion.identity);
         }
     }
+
+    // collision handling
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        // check if we hit a temp loot
+        if (other.gameObject.layer == 9)
+        {
+            // we hit loot
+            Debug.Log("We hit loot");
+            // get loot data; modify player
+            LayerData layerFromLoot = other.gameObject.GetComponent<Loot>().LayerData;
+            tankData.AddLayer(layerFromLoot);
+            UpdateState();
+            // destroy loot
+            GameObject.Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.layer == 10)
+        {
+            // TODO : HERE
+            // we hit a bomb
+            Debug.Log("We hit a bomb");
+            if (!tankData.TakeDamage(100)) // if we lost a layer as a result of the damage
+            {
+                LayerData droppedlayer = tankData.RemoveLayer();
+                // check if the layer is used up
+                if (droppedlayer.Uses > 0)
+                {
+                    // instantiate new drop with the layer data
+                    // for test drop the lew loot in behind the player
+                    Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y - 2, transform.position.z);
+                    GameObject newLoot = Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
+                    newLoot.GetComponent<Loot>().SetOwner(master.transform.gameObject);
+                }
+            }
+        }
+    }
+
 }

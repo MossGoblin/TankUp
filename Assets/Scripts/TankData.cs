@@ -35,7 +35,7 @@ public class TankData
         if (layers.Count > 0)
         {
             UpdateModifiers();
-           return layers.Pop();
+            return layers.Pop();
         }
         else
         {
@@ -47,29 +47,25 @@ public class TankData
 
     public void UseUp()
     {
-        layers.Peek().UseUp();
+        if (!layers.Peek().UseUp())
+        {
+            layers.Pop();
+            UpdateModifiers();
+        }
         // if the layer has been used u, destroy it and update above
     }
 
-    public void TakeDamage(float damage)
+    public bool TakeDamage(float damage)
     {
         Durability -= damage;
+
         if (Durability <= 0)
         {
-            // destroy the layer
-            LayerData layerToDrop = RemoveLayer();
-            if (layerToDrop.UseUp()) // the layer has not been completely used up
-            {
-                // spawn loot and attach layer
-            }
-            else
-            {
-                // nothing happens (indicate visually that the layer has been used up)
-            }
-
-            // update stats for teh new layer stack
-            UpdateModifiers();
+            // send a message that a layer is lost
+            return false;
         }
+        // a layer is NOT lost
+        return true;
     }
 
     public WeaponTypes CurrentWeapon()

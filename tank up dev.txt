@@ -1,3 +1,5 @@
 ~ [d1, 10:50] simple terrain + basic movement; camera still not attached
 ~ [d1, 11:12] camera attached
 ~ [d1, 12:50] basic data structures layed down; started working on interactions (random loot object)
+~ [d1, 14:50] added sample loot to test gaining layers; added sample bomb to test loss of health points
+~ [d1, 17:00] midcode - layer shedding time
