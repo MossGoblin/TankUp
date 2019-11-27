@@ -44,7 +44,9 @@
     <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
-  <ItemGroup>     <Compile Include="Assets\Scripts\CameraMaster.cs" />
+  <ItemGroup>     <Compile Include="Assets\Scripts\Bomb.cs" />
+     <Compile Include="Assets\Scripts\CameraMaster.cs" />
+     <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\GameMaster.cs" />
      <Compile Include="Assets\Scripts\LayerData.cs" />
      <Compile Include="Assets\Scripts\Loot.cs" />

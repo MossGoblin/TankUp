@@ -15,10 +15,22 @@ public class Loot : MonoBehaviour
     {
         master = GameObject.Find("GameMaster").GetComponent<GameMaster>();
         LayerData = master.GenerateRandomLayer();
+        UpdateColor();
     }
 
     public void SetOwner(GameObject owner)
     {
         lastOwner = owner;
+    }
+
+    public void SetLayerData(LayerData layer)
+    {
+        LayerData = layer;
+        UpdateColor();
+    }
+
+    private void UpdateColor()
+    {
+        transform.GetComponentInChildren<SpriteRenderer>().color = master.player.tempColorScheme[(int)LayerData.WeaponType];
     }
 }

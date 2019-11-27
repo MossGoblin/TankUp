@@ -24,7 +24,7 @@ public class GameMaster : MonoBehaviour
     public LayerData GenerateRandomLayer()
     {
         Array weaponTypes = Enum.GetValues(typeof(WeaponTypes));
-        int randomWeaponIndex = UnityEngine.Random.Range(0, 2);
+        int randomWeaponIndex = UnityEngine.Random.Range(0, 3);
         WeaponTypes randomWeapon = (WeaponTypes)weaponTypes.GetValue(randomWeaponIndex);
         LayerData newLayer = new LayerData(randomWeapon);
 

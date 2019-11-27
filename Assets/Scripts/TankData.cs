@@ -34,8 +34,9 @@ public class TankData
     {
         if (layers.Count > 0)
         {
+            LayerData removedLayer = layers.Pop();
             UpdateModifiers();
-            return layers.Pop();
+            return removedLayer;
         }
         else
         {
@@ -78,6 +79,11 @@ public class TankData
         return layers.Peek().Uses;
     }
 
+    public int LayersCount()
+    {
+        return layers.Count;
+    }
+
     private void UpdateModifiers()
     {
         // size is proportional to the number of layers
@@ -85,7 +91,7 @@ public class TankData
         // the rotation speed goes down with the number of layers that are the same as the outermost
         // the damage goes up with the number of layers that are the same as the outermost
 
-        SizeFactor = layers.Count - 1; // each will probably give about 5%
+        SizeFactor = layers.Count; // each will probably give about 5%
         
         int currentWeaponCount = 0; // number of layers same as the current layer
         // int numberOfTypes = Enum.GetNames(typeof(WeaponTypes)).Length; // why do I need that now

@@ -1,14 +1,21 @@
-day 1
+- day 1 -
 basic plan
 construction/deconstruction of tanks
 basic shooting
+basic enemies
 
-day 2
+- day 2 -
 tank types
 weapon types
 points
+conistent graphics
+some UI for the inner state
 
 bonus
 power ups
 movement effects
 sounds
+
+
+- TODO -
+make sure the ownership of loot is correct

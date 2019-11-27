@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Loot
   - Bomb
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Background
   - Loot
   - Bomb
-  - 
+  - Enemy
   - 
   - 
   - 

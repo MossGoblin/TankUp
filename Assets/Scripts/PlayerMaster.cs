@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,13 +8,19 @@ public class PlayerMaster : MonoBehaviour
     // temp refs
     [SerializeField] GameObject coinPrefab;
     [SerializeField] GameObject bombPrefab;
+
+    public Color[] tempColorScheme = new Color[] {
+        new Color(1, 0, 0, 1),
+        new Color(0, 1, 0, 1),
+        new Color(0, 0, 1, 1)
+    };
     
     //refs
     [SerializeField] GameMaster master;
     [SerializeField] TankData tankData;
 
     // components and modifiers
-
+    Vector3 originalLocalScale;
     private float durability;
     private WeaponTypes weapon;
     private float speedFactor;
@@ -22,10 +29,11 @@ public class PlayerMaster : MonoBehaviour
     private float damageFactor;
 
     private float sizeFactorWeight = 0.05f;
-    private float currentSizeModifier = 0;
     private float speed = 5;
     private float rotationSpeed = 70;
 
+    // visual references
+    [SerializeField] Transform bullseye;
 
     // Start is called before the first frame update
     void Start()
@@ -34,11 +42,13 @@ public class PlayerMaster : MonoBehaviour
         // generate tank data
         tankData = master.GenerateNewTankData();
 
-        // test layer
-        LayerData testSecondLayer = master.GenerateRandomLayer();
-        tankData.AddLayer(testSecondLayer);
+        // // test layer
+        // LayerData testSecondLayer = master.GenerateRandomLayer();
+        // tankData.AddLayer(testSecondLayer);
 
-
+        // keep original size
+        originalLocalScale = transform.localScale;
+        
         // position player
         int startPosX = master.terrain.Width;
         int startPosY = master.terrain.Height;
@@ -60,8 +70,8 @@ public class PlayerMaster : MonoBehaviour
 
     private void HandleMovement()
     {
-        float translation = Input.GetAxis("Vertical") * speed;
-        float rotation = - Input.GetAxis("Horizontal") * rotationSpeed;
+        float translation = Input.GetAxis("Vertical") * speed * (1 + speedFactor/100);
+        float rotation = - Input.GetAxis("Horizontal") * rotationSpeed * (1 + rotationFactor/100);
 
         // reverse
         if (Input.GetAxis("Vertical") < 0)
@@ -85,21 +95,20 @@ public class PlayerMaster : MonoBehaviour
         speedFactor = tankData.SpeedFactor;
         rotationFactor = tankData.RotationFactor;
         
-        sizeFactor = tankData.SizeFactor * 0.05f;
+        sizeFactor = tankData.SizeFactor;
         damageFactor = tankData.DamageFactor;
         weapon = tankData.CurrentWeapon();
 
-        if (currentSizeModifier != tankData.SizeFactor)
-        {
-            currentSizeModifier = tankData.SizeFactor;
-            UpdateSize(currentSizeModifier * sizeFactorWeight);
-        }
+
+        UpdateSize(sizeFactor * sizeFactorWeight);
+
+        TempColor();
     }
 
     private void UpdateSize(float sizeFactor)
     {
-        Vector3 newScale = new Vector3(transform.localScale.x * (1 + sizeFactor), transform.localScale.y * (1 + sizeFactor), transform.localScale.z);
-        transform.localScale = newScale;
+        Vector3 updatedScale = new Vector3(originalLocalScale.x * (1 + sizeFactor), originalLocalScale.y * (1 + sizeFactor), originalLocalScale.z);
+        transform.localScale = updatedScale;
     }
 
     private void HandleTempInput()
@@ -109,13 +118,24 @@ public class PlayerMaster : MonoBehaviour
             Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
             GameObject newLoot = Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
             newLoot.GetComponent<Loot>().SetOwner(master.transform.gameObject);
+            // int weaponIndex = (int)weapon;
+            // newLoot.GetComponentInChildren<SpriteRenderer>().color = tempColorScheme[weaponIndex];
         }
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            Vector3 positionForBomb = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+            // get the position of the billseye
+            Vector3 positionForBomb = bullseye.position;
             GameObject newBomb = Instantiate(bombPrefab, positionForBomb, Quaternion.identity);
+            newBomb.GetComponent<Bomb>().SetDamage(damageFactor);
         }
+    }
+
+    private void TempColor()
+    {
+        // TODO : TEMP player coloring
+        int weaponIndex = Array.IndexOf(Enum.GetValues(weapon.GetType()), weapon);
+        transform.GetComponentInChildren<SpriteRenderer>().color = tempColorScheme[weaponIndex];
     }
 
     // collision handling
@@ -136,23 +156,48 @@ public class PlayerMaster : MonoBehaviour
 
         if (other.gameObject.layer == 10)
         {
-            // TODO : HERE
             // we hit a bomb
             Debug.Log("We hit a bomb");
-            if (!tankData.TakeDamage(100)) // if we lost a layer as a result of the damage
+            if (!tankData.TakeDamage(50)) // if we lost a layer as a result of the damage
             {
-                LayerData droppedlayer = tankData.RemoveLayer();
-                // check if the layer is used up
-                if (droppedlayer.Uses > 0)
+                // check if this is our last layer
+                if (tankData.LayersCount() == 1)
                 {
-                    // instantiate new drop with the layer data
-                    // for test drop the lew loot in behind the player
-                    Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y - 2, transform.position.z);
-                    GameObject newLoot = Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
-                    newLoot.GetComponent<Loot>().SetOwner(master.transform.gameObject);
+                    // can not destroy last layer
+                    // TODO :: Elaborate when last layer is desrtoyed
+                    Debug.Log("Last layer busted");
+                    GameObject.Destroy(transform.gameObject);
+                    // TODOFIXME : Camera still searching for the player
+                }
+                else
+                {
+                    LayerData droppedlayer = tankData.RemoveLayer();
+                    // reduce the uses of the dropped layer
+                    droppedlayer.UseUp();
+                    // check if the layer is used up
+                    if (droppedlayer.Uses > 0)
+                    {
+                        // instantiate new drop with the layer data
+                        // for test drop the lew loot in behind the player
+                        Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
+                        GameObject newLoot = Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
+                        newLoot.GetComponent<Loot>().SetLayerData(droppedlayer);
+                        newLoot.GetComponent<Loot>().SetOwner(transform.gameObject);
+                        // temp loot coloring
+                        newLoot.GetComponentInChildren<SpriteRenderer>().color = tempColorScheme[(int)droppedlayer.WeaponType];
+                    }
+                    UpdateState();
                 }
             }
+            
+            // destroy the bomb
+            GameObject.Destroy(other.gameObject);
         }
+    }
+
+    private void Shoot()
+    {
+
     }
 
 }

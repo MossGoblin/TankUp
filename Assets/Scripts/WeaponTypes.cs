@@ -6,7 +6,6 @@ public enum WeaponTypes
 {
     Mortar,
     Rocket,
-
     MachineGun
 
 }
