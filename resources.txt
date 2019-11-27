@@ -1,0 +1,3 @@
+* terrain from Open Game Art - https://opengameart.org/content/seamless-terrain-and-concrete-textures
+* basic tank - custom pixel art
+* barrel - open game art - https://opengameart.org/content/pixel-barrel

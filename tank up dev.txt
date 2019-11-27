@@ -1,0 +1,3 @@
+~ [d1, 10:50] simple terrain + basic movement; camera still not attached
+~ [d1, 11:12] camera attached
+~ [d1, 12:50] basic data structures layed down; started working on interactions (random loot object)
