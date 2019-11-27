@@ -4,3 +4,4 @@
 ~ [d1, 14:50] added sample loot to test gaining layers; added sample bomb to test loss of health points
 ~ [d1, 17:00] midcode - layer shedding time
 ~ [d1, 20:26] dropping bombs now; layering up and down is kinda OK; working on the enemies
+~ [d1, 23:10] enemies ready for improvement - trying to follow the player; still don;t know how to shoot

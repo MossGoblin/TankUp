@@ -30,7 +30,7 @@ public class PlayerMaster : MonoBehaviour
 
     private float sizeFactorWeight = 0.05f;
     private float speed = 5;
-    private float rotationSpeed = 70;
+    private float rotationSpeed = 95;
 
     // visual references
     [SerializeField] Transform bullseye;

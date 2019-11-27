@@ -1,8 +1,8 @@
 - day 1 -
 basic plan
-construction/deconstruction of tanks
-basic shooting
-basic enemies
+construction/deconstruction of tanks -- working
+basic shooting -- halfway; bombs still do nothing
+basic enemies -- kind of done; still don't shoot; how should they shoot?
 
 - day 2 -
 tank types
@@ -19,3 +19,8 @@ sounds
 
 - TODO -
 make sure the ownership of loot is correct
+
+- NEXT -
+* fix bombs and make sure the enemies die properly and drop loot
+* teach the enemies to shoot
+
