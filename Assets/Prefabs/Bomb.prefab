@@ -83,7 +83,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ec09b961b316344aded2ac81b1f579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tempExplosionSprite: {fileID: 661860587479787336, guid: 419b05a0701050f448543740d4c96680,
+    type: 3}
   LifeSpan: 0
+  Damage: 0
 --- !u!1 &7450974088681410589
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,8 +16,8 @@ public class TerrainBuilder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Width = 50;
-        Height = 40;
+        Width = 25;
+        Height = 20;
 
         // set up grid
         terrainGrid = new GameObject[Width, Height];

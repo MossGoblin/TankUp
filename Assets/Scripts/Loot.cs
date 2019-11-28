@@ -10,18 +10,24 @@ public class Loot : MonoBehaviour
 
     GameObject lastOwner;
 
+    float lifeSpan = 10f;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         master = GameObject.Find("GameMaster").GetComponent<GameMaster>();
-        LayerData = master.GenerateRandomLayer();
-        UpdateColor();
+        // LayerData = master.GenerateRandomLayer();
     }
 
-    public void SetOwner(GameObject owner)
+    public void Update()
     {
-        lastOwner = owner;
+        lifeSpan -= Time.deltaTime;
+        if (lifeSpan <= 0)
+        {
+            GameObject.Destroy(transform.gameObject);
+        }
     }
+
 
     public void SetLayerData(LayerData layer)
     {
@@ -31,6 +37,6 @@ public class Loot : MonoBehaviour
 
     private void UpdateColor()
     {
-        transform.GetComponentInChildren<SpriteRenderer>().color = master.player.tempColorScheme[(int)LayerData.WeaponType];
+        transform.GetComponentInChildren<SpriteRenderer>().color = master.tempColorScheme[(int)LayerData.WeaponType];
     }
 }

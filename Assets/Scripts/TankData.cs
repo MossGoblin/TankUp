@@ -30,20 +30,24 @@ public class TankData
         UpdateModifiers();
     }
 
-    public LayerData RemoveLayer()
+    public LayerData DropLayer()
     {
+        LayerData droppedLayer = null;
         if (layers.Count > 0)
         {
-            LayerData removedLayer = layers.Pop();
+            droppedLayer = layers.Pop();
+        }
+
+        if (layers.Count > 0)
+        {
             UpdateModifiers();
-            return removedLayer;
         }
         else
         {
-            Debug.Log("Only one layer left, can not remove");
-            return null;
+            Debug.Log("Last layer dropped - WE DED");
         }
 
+        return droppedLayer;
     }
 
     public void UseUp()
@@ -53,7 +57,7 @@ public class TankData
             layers.Pop();
             UpdateModifiers();
         }
-        // if the layer has been used u, destroy it and update above
+        // if the layer has been used, destroy it and update above
     }
 
     public bool TakeDamage(float damage)

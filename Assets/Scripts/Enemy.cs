@@ -31,12 +31,12 @@ public class Enemy : MonoBehaviour
         UpdateVisuals();
 
 
-        movementSpeed = 0.75f;
+        movementSpeed = 0.25f; // good speed is 0.75f
         rotationSpeed = 1.75f;
         Debug.Log("Chasing the scum");
 
         // FIXME : TEMP ALIGN WITH PLAYER
-        Vector3 tempStartPosition = new Vector3(49, 42);
+        Vector3 tempStartPosition = new Vector3(24, 21);
         transform.position = tempStartPosition;
     }
 
@@ -55,16 +55,39 @@ public class Enemy : MonoBehaviour
 
         // simple movement
         transform.Translate(Vector3.up * movementSpeed * Time.deltaTime);
+
+        // TODO :: Check for playerrange and shoot
     }
 
     private void UpdateVisuals()
     {
-        Color[] tempColorScheme = new Color[] {
-        new Color(1, 0, 0, 1),
-        new Color(0, 1, 0, 1),
-        new Color(0, 0, 1, 1)
-        };
-        transform.GetComponentInChildren<SpriteRenderer>().color = master.player.tempColorScheme[(int)tankData.CurrentWeapon()];
+        int weaponIndex = (int)tankData.CurrentWeapon();
+        transform.GetComponentInChildren<SpriteRenderer>().sprite = master.enemySprites[weaponIndex];
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (!tankData.TakeDamage(damage)) // if we lost a layer as a result of the damage
+        {
+            // destroy self
+            GameObject.Destroy(transform.gameObject); // should this work? destroyed objects are supposed to be collected at the end of the frame
+
+
+            // Enemies have only one layer
+            // Drop that layer
+            LayerData droppedlayer = tankData.DropLayer();
+            
+            // reduce the uses of the dropped layer
+            droppedlayer.UseUp();
+            
+            // check if the layer is used up
+            // instantiate new drop with the layer data
+            Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            GameObject newLoot = Instantiate(master.lootLayerPrefab, positionForLoot, Quaternion.identity);
+            newLoot.GetComponent<Loot>().SetLayerData(droppedlayer);
+            // temp loot coloring
+            newLoot.GetComponentInChildren<SpriteRenderer>().color = master.tempColorScheme[(int)droppedlayer.WeaponType];
+        }
     }
 }
 

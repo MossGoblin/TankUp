@@ -6,27 +6,21 @@ using UnityEngine;
 public class PlayerMaster : MonoBehaviour
 {
     // temp refs
-    [SerializeField] GameObject coinPrefab;
+    [SerializeField] GameObject lootLayerPrefab;
     [SerializeField] GameObject bombPrefab;
-
-    public Color[] tempColorScheme = new Color[] {
-        new Color(1, 0, 0, 1),
-        new Color(0, 1, 0, 1),
-        new Color(0, 0, 1, 1)
-    };
     
     //refs
     [SerializeField] GameMaster master;
     [SerializeField] TankData tankData;
 
-    // components and modifiers
+    // components and modifiers -- some are temporarily Seralized for visibility in the Inspector for debugging properties
     Vector3 originalLocalScale;
-    private float durability;
-    private WeaponTypes weapon;
-    private float speedFactor;
-    private float rotationFactor;
-    private float sizeFactor;
-    private float damageFactor;
+    [SerializeField] private float durability;
+    [SerializeField] private WeaponTypes weapon;
+    [SerializeField] private float speedFactor;
+    [SerializeField] private float rotationFactor;
+    [SerializeField] private float sizeFactor;
+    [SerializeField] private float damageFactor;
 
     private float sizeFactorWeight = 0.05f;
     private float speed = 5;
@@ -116,18 +110,12 @@ public class PlayerMaster : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
-            GameObject newLoot = Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
-            newLoot.GetComponent<Loot>().SetOwner(master.transform.gameObject);
-            // int weaponIndex = (int)weapon;
-            // newLoot.GetComponentInChildren<SpriteRenderer>().color = tempColorScheme[weaponIndex];
+            GameObject newLoot = Instantiate(lootLayerPrefab, positionForLoot, Quaternion.identity);
         }
 
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            // get the position of the billseye
-            Vector3 positionForBomb = bullseye.position;
-            GameObject newBomb = Instantiate(bombPrefab, positionForBomb, Quaternion.identity);
-            newBomb.GetComponent<Bomb>().SetDamage(damageFactor);
+            Shoot(weapon);
         }
     }
 
@@ -135,7 +123,7 @@ public class PlayerMaster : MonoBehaviour
     {
         // TODO : TEMP player coloring
         int weaponIndex = Array.IndexOf(Enum.GetValues(weapon.GetType()), weapon);
-        transform.GetComponentInChildren<SpriteRenderer>().color = tempColorScheme[weaponIndex];
+        transform.GetComponentInChildren<SpriteRenderer>().color = master.tempColorScheme[weaponIndex];
     }
 
     // collision handling
@@ -158,7 +146,49 @@ public class PlayerMaster : MonoBehaviour
         {
             // we hit a bomb
             Debug.Log("We hit a bomb");
-            if (!tankData.TakeDamage(50)) // if we lost a layer as a result of the damage
+
+            // if (!tankData.TakeDamage(50)) // if we lost a layer as a result of the damage
+            // {
+            //     // check if this is our last layer
+            //     if (tankData.LayersCount() == 1)
+            //     {
+            //         // can not destroy last layer
+            //         // TODO :: Elaborate when last layer is desrtoyed
+            //         Debug.Log("Last layer busted");
+            //         GameObject.Destroy(transform.gameObject);
+            //         // TODOFIXME : Camera still searching for the player
+            //     }
+            //     else
+            //     {
+            //         LayerData droppedlayer = tankData.RemoveLayer();
+            //         // reduce the uses of the dropped layer
+            //         droppedlayer.UseUp();
+            //         // check if the layer is used up
+            //         if (droppedlayer.Uses > 0)
+            //         {
+            //             // instantiate new drop with the layer data
+            //             // for test drop the lew loot in behind the player
+            //             Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
+            //             GameObject newLoot = Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
+            //             newLoot.GetComponent<Loot>().SetLayerData(droppedlayer);
+            //             // temp loot coloring
+            //             newLoot.GetComponentInChildren<SpriteRenderer>().color = tempColorScheme[(int)droppedlayer.WeaponType];
+            //         }
+            //         UpdateState();
+            //     }
+            // }
+            
+            // take half damage from the bomb
+            TakeDamage(other.gameObject.GetComponent<Bomb>().Damage / 2);
+
+            // destroy the bomb
+            GameObject.Destroy(other.gameObject);
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+            if (!tankData.TakeDamage(damage)) // if we lost a layer as a result of the damage
             {
                 // check if this is our last layer
                 if (tankData.LayersCount() == 1)
@@ -171,7 +201,7 @@ public class PlayerMaster : MonoBehaviour
                 }
                 else
                 {
-                    LayerData droppedlayer = tankData.RemoveLayer();
+                    LayerData droppedlayer = tankData.DropLayer();
                     // reduce the uses of the dropped layer
                     droppedlayer.UseUp();
                     // check if the layer is used up
@@ -180,24 +210,25 @@ public class PlayerMaster : MonoBehaviour
                         // instantiate new drop with the layer data
                         // for test drop the lew loot in behind the player
                         Vector3 positionForLoot = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
-                        GameObject newLoot = Instantiate(coinPrefab, positionForLoot, Quaternion.identity);
+                        GameObject newLoot = Instantiate(lootLayerPrefab, positionForLoot, Quaternion.identity);
                         newLoot.GetComponent<Loot>().SetLayerData(droppedlayer);
-                        newLoot.GetComponent<Loot>().SetOwner(transform.gameObject);
                         // temp loot coloring
-                        newLoot.GetComponentInChildren<SpriteRenderer>().color = tempColorScheme[(int)droppedlayer.WeaponType];
+                        newLoot.GetComponentInChildren<SpriteRenderer>().color = master.tempColorScheme[(int)droppedlayer.WeaponType];
                     }
                     UpdateState();
                 }
             }
-            
-            // destroy the bomb
-            GameObject.Destroy(other.gameObject);
-        }
+
     }
+    
 
-    private void Shoot()
+    private void Shoot(WeaponTypes weapon)
     {
-
+        // currently we use only one shooting mode - for Mortar
+        // get the position of the billseye
+        Vector3 positionForBomb = bullseye.position;
+        GameObject newBomb = Instantiate(bombPrefab, positionForBomb, Quaternion.identity);
+        newBomb.GetComponent<Bomb>().SetDamage(damageFactor);
     }
 
 }

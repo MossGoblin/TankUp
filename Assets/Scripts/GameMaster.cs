@@ -8,6 +8,16 @@ public class GameMaster : MonoBehaviour
     // refs
     [SerializeField] public PlayerMaster player;
     [SerializeField] public TerrainBuilder terrain;
+    [SerializeField] public GameObject explosion;
+    [SerializeField] public GameObject lootLayerPrefab;
+    [SerializeField] public Sprite[] enemySprites;
+
+    
+    public Color[] tempColorScheme = new Color[] {
+        new Color(1, 0, 0, 1),
+        new Color(0, 1, 0, 1),
+        new Color(0, 0, 1, 1)
+    };
 
     // Start is called before the first frame update
     void Start()
@@ -37,5 +47,10 @@ public class GameMaster : MonoBehaviour
         TankData newTankData = new TankData(newLayerData);
 
         return newTankData;
+    }
+
+    public void SpawnExplosion(Vector3 position)
+    {
+        Instantiate(explosion, position, Quaternion.identity);
     }
 }

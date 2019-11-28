@@ -346,6 +346,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2028201068}
   terrain: {fileID: 1939571072}
+  explosion: {fileID: 410661652961961113, guid: be2583a1de71e8947ac5ca61a7ff3f36,
+    type: 3}
+  lootLayerPrefab: {fileID: 8189977706646882208, guid: f73fa03b655b67445910f342aa1e0428,
+    type: 3}
+  enemySprites:
+  - {fileID: -6583503501803103652, guid: 00eabb3e7512240478fc1c2393a00159, type: 3}
+  - {fileID: 6292663892411916953, guid: 00eabb3e7512240478fc1c2393a00159, type: 3}
+  - {fileID: -1399570350620089810, guid: 00eabb3e7512240478fc1c2393a00159, type: 3}
+  tempColorScheme:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
 --- !u!4 &1214354563
 Transform:
   m_ObjectHideFlags: 0
@@ -470,6 +482,75 @@ Transform:
   m_Father: {fileID: 1939571073}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1665822186
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184032886715114828, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8914759560643249412, guid: d6bf3c7238900704e834e4232b60252d,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d6bf3c7238900704e834e4232b60252d, type: 3}
 --- !u!1 &1939571071
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,14 +644,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78928e86b3300574cb27c900ad351037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinPrefab: {fileID: 8189977706646882208, guid: f73fa03b655b67445910f342aa1e0428,
+  lootLayerPrefab: {fileID: 8189977706646882208, guid: f73fa03b655b67445910f342aa1e0428,
     type: 3}
   bombPrefab: {fileID: 7450974087922563727, guid: 92ed20a07917b80438093a92922cfc2a,
     type: 3}
-  tempColorScheme:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0, a: 1}
-  - {r: 0, g: 0, b: 1, a: 1}
   master: {fileID: 1214354562}
   bullseye: {fileID: 1478387295}
 --- !u!58 &2028201069
