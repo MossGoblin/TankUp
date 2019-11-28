@@ -228,7 +228,7 @@ public class PlayerMaster : MonoBehaviour
         // get the position of the billseye
         Vector3 positionForBomb = bullseye.position;
         GameObject newBomb = Instantiate(bombPrefab, positionForBomb, Quaternion.identity);
-        newBomb.GetComponent<Bomb>().SetDamage(damageFactor);
+        newBomb.GetComponent<Bomb>().SetStats(0.5f, damageFactor, "Enemy");
     }
 
 }

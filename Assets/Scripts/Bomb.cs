@@ -7,6 +7,8 @@ public class Bomb : MonoBehaviour
 
     public float LifeSpan;
     public float Damage;
+    private float radius;
+    private string targetTag;
 
     [SerializeField] GameMaster master;
 
@@ -38,22 +40,14 @@ public class Bomb : MonoBehaviour
 
 
             // spawn explosion
-            master.SpawnExplosion(transform.position);
-            // TODO :: deal damage around
-            // create a CircleCollider to check against
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.5f);
-            foreach (Collider2D collider in colliders)
-            {
-                // if it is an enemy - deal damage
-                GameObject colliderGO = collider.transform.gameObject;
-                if (colliderGO.tag == "Enemy")
-                {
-                    colliderGO.GetComponent<Enemy>().TakeDamage(Damage);
-                }
-            }
+            GameObject explosion = master.SpawnExplosion(transform.position);
+            explosion.GetComponent<Explosion>().SetUpStats(radius, Damage, targetTag);
+
     }
-    public void SetDamage(float damageFactor)
+    public void SetStats(float radius, float damageFactor, string target)
     {
         Damage = Damage * (1 + damageFactor/20); // each unit of damage factor increases the damage by 5%
+        this.radius = radius;
+        targetTag = target;
     }
 }

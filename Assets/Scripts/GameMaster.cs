@@ -8,7 +8,8 @@ public class GameMaster : MonoBehaviour
     // refs
     [SerializeField] public PlayerMaster player;
     [SerializeField] public TerrainBuilder terrain;
-    [SerializeField] public GameObject explosion;
+    [SerializeField] public GameObject explosionPrefab;
+    [SerializeField] public GameObject fireballPrefab;
     [SerializeField] public GameObject lootLayerPrefab;
     [SerializeField] public Sprite[] enemySprites;
 
@@ -49,8 +50,13 @@ public class GameMaster : MonoBehaviour
         return newTankData;
     }
 
-    public void SpawnExplosion(Vector3 position)
+    public GameObject SpawnExplosion(Vector3 position)
     {
-        Instantiate(explosion, position, Quaternion.identity);
+        return Instantiate(explosionPrefab, position, Quaternion.identity);
+    }
+
+    public GameObject SpawnFireball(Vector3 origin, Quaternion orientation)
+    {
+        return Instantiate(fireballPrefab, origin, orientation);
     }
 }

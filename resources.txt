@@ -2,3 +2,4 @@
 * basic tank - custom pixel art
 * barrel - open game art - https://opengameart.org/content/pixel-barrel
 * enemy tanks - https://opengameart.org/content/2d-tanks-top-down
+* fireball - https://opengameart.org/content/firebal-32x32

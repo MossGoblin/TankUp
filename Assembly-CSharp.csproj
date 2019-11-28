@@ -48,6 +48,7 @@
      <Compile Include="Assets\Scripts\CameraMaster.cs" />
      <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\Explosion.cs" />
+     <Compile Include="Assets\Scripts\Fireball.cs" />
      <Compile Include="Assets\Scripts\GameMaster.cs" />
      <Compile Include="Assets\Scripts\LayerData.cs" />
      <Compile Include="Assets\Scripts\Loot.cs" />
@@ -77,14 +78,14 @@
  <Reference Include="Unity.Rider.Editor">
  <HintPath>D:/[ CODEE ]/[ GITTED ]/TankUp/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.2D.Sprite.Editor">
+ <HintPath>D:/[ CODEE ]/[ GITTED ]/TankUp/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.TextMeshPro">
  <HintPath>D:/[ CODEE ]/[ GITTED ]/TankUp/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>D:/[ CODEE ]/[ GITTED ]/TankUp/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.Sprite.Editor">
- <HintPath>D:/[ CODEE ]/[ GITTED ]/TankUp/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

@@ -6,3 +6,4 @@
 ~ [d1, 20:26] dropping bombs now; layering up and down is kinda OK; working on the enemies
 ~ [d1, 23:10] enemies ready for improvement - trying to follow the player; still don;t know how to shoot
 ~ [d2, 15:25] finally destroying enemies as supposed
+~ [d2, 17:10] almost working shooting; tried using simple animations instead of sprites and I suffer for it
